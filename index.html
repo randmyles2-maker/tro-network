@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TR0_NETWORK // PHASE_V</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <canvas id="kineticCanvas"></canvas>
+    
+    <div id="reticle-wrap">
+        <div id="inner-dot"></div>
+        <div class="ring" id="ring-1" style="width: 20px; height: 20px;"></div>
+        <div class="ring" id="ring-2" style="width: 40px; height: 40px; border-style: dashed; opacity: 0.5;"></div>
+    </div>
+
+    <div id="deck">
+        <header class="channel-strip" id="tabGrid"></header>
+
+        <main class="core-input-wrap">
+            <div class="status-tag">ACTIVE_CONNECTION // TR0 NETWORK</div>
+            <div class="input-box">
+                <input type="text" id="cmd" placeholder="TR0 NETWORK" autocomplete="off">
+            </div>
+        </main>
+
+        <footer>
+            <div class="telemetry-unit">
+                <div id="clock">00:00:00</div>
+                <div class="loc-tag">GEORGIA_EST // SECURE</div>
+            </div>
+        </footer>
+    </div>
+
+    <div id="portal-mask">
+        <div class="exit-link" onclick="closePortal()">TERMINATE_SESSION</div>
+        <div id="web-render" style="height: 100%;"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
