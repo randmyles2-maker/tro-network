@@ -72,19 +72,12 @@ function animate() {
 }
 
 // --- SYSTEM LOGIC ---
-let tabs = [{ id: 0, name: "MAIN_NETWORK", url: "" }]; // Starting with one tab
-let activeTab = 0;
+let tabs = [{ id: 1, name: "HOME", url: "" }];
+let activeTab = 1;
 
 const sys = {
-    boot: (name = "TR0_NETWORK", url = "") => {
-        const id = Date.now();
-        tabs.push({ id, name, url });
-        sys.shift(id);
-    },
     shift: (id) => {
         activeTab = id;
-        const tab = tabs.find(t => t.id === id);
-        document.getElementById('cmd').value = tab.url;
         sys.render();
     },
     render: () => {
@@ -97,27 +90,31 @@ const sys = {
             el.onclick = () => sys.shift(t.id);
             grid.appendChild(el);
         });
+
         const portal = document.getElementById('portal-mask');
         const target = tabs.find(t => t.id === activeTab);
-        if(target.url) {
+        
+        if(target && target.url) {
             portal.classList.add('active');
             document.getElementById('web-render').innerHTML = `<iframe src="${target.url}"></iframe>`;
         } else {
             portal.classList.remove('active');
+            document.getElementById('web-render').innerHTML = '';
         }
     }
 };
 
 function closePortal() {
     const tab = tabs.find(t => t.id === activeTab);
-    tab.url = "";
+    if(tab) tab.url = "";
     sys.render();
 }
 
 // --- SENSORS & CLOCK ---
 window.addEventListener('mousemove', (e) => {
     mouse.x = e.clientX; mouse.y = e.clientY;
-    document.getElementById('reticle-wrap').style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+    document.getElementById('reticle-wrap').style.left = `${e.clientX}px`;
+    document.getElementById('reticle-wrap').style.top = `${e.clientY}px`;
 });
 
 window.addEventListener('mousedown', () => {
@@ -141,11 +138,10 @@ window.addEventListener('mouseup', () => {
 document.getElementById('cmd').onkeypress = (e) => {
     if(e.key === 'Enter') {
         const val = e.target.value.trim();
-        const url = val.includes('.') ? (val.startsWith('http') ? val : 'https://' + val) : `https://www.google.com/search?q=${encodeURIComponent(val)}&igu=1`;
-        const current = tabs.find(t => t.id === activeTab);
-        current.url = url;
-        current.name = val.split('.')[0].slice(0,10);
+        const url = `https://www.google.com/search?q=${encodeURIComponent(val)}&igu=1`;
+        tabs[0].url = url;
         sys.render();
+        e.target.value = '';
     }
 };
 
@@ -156,16 +152,15 @@ function updateClock() {
         hour: 'numeric', 
         minute: '2-digit', 
         second: '2-digit', 
-        hour12: true 
+        hour12: false 
     };
-    
     let nycTime = new Intl.DateTimeFormat('en-US', options).format(now);
-    document.getElementById('clock').textContent = nycTime.toLowerCase();
+    document.getElementById('clock').textContent = nycTime;
 }
 
-// Initialization calls
+// STARTUP SEQUENCE
 init(); 
 animate();
 setInterval(updateClock, 1000);
 updateClock();
-sys.render(); // Initial UI render
+sys.render();
