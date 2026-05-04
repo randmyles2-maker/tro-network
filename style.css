@@ -77,7 +77,6 @@ canvas {
     letter-spacing: 4px;
     transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
     clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
-    cursor: pointer;
 }
 
 .channel.active {
